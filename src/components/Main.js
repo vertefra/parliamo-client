@@ -4,17 +4,19 @@ const ENDPOINT = "http://127.0.0.1:5000/";
 
 export default function Main() {
   const [response, setResponse] = useState("");
+  const socket = io.connect(ENDPOINT, { reconnection: true });
 
   useEffect(() => {
-    const socket = io.connect(ENDPOINT, { reconnection: true });
-    socket.on("responseMessage", (message) => {
-      console.log("hello", message);
+    socket.on("connect", (message) => {
+      console.log(message);
       setResponse(message);
     });
   }, []);
+
   return (
     <div>
-      <p> {response.data}</p>
+      <button>click</button>
+      <p> {response}</p>
     </div>
   );
 }
