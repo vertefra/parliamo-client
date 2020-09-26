@@ -1,0 +1,33 @@
+@import "../Style";
+
+#dashboard {
+    border: 1px solid black;
+    display: flex;
+    justify-content: space-between;
+    padding: $sp-md;
+    margin: $sp-sm;
+}
+
+.onlineUsers {
+    height: 400px;
+    width: 200px;
+    border: 1px solid black;
+    padding: $sp-sm;
+
+    h1 {
+        text-align: center;
+    }
+}
+
+.userButton {
+    width: $sz-lg;
+    background-color: $primary-btn;
+    padding: $sp-sm;
+    border-radius: $sp-sm;
+    cursor: pointer;
+
+    &:hover {
+        background-color: $selected-btn;
+        color: $primary-btn;
+    }
+}

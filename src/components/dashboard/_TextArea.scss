@@ -1,0 +1,24 @@
+@import '../Style';
+
+.textArea {
+    border: 1px black solid;
+    padding: $sp-sm;
+
+    form {
+        display: flex;
+        flex-direction: column;
+
+        label {
+            height: $sz-sm;
+        }
+
+        div {
+            display: flex;
+        }
+
+        textarea {
+            resize: none;
+        }
+    }
+
+}
