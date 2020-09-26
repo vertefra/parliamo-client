@@ -40,6 +40,9 @@ export default function Main() {
   // sockets event listeners
 
   useEffect(() => {
+    console.log(
+      "IF YOU SEE MORE THAN 2 TIMES THIS MESSAGE SOMETHING IS WRONG WITH THE USE EFFECT FOR SOCKET IO"
+    );
     if (user.connected) {
       console.log("Connection established", user);
 
@@ -94,7 +97,7 @@ export default function Main() {
             placeholder="username"
           />
           {user.username && (
-            <input type="submit" value="connect" onClick={join} />
+            <input type="button" value="connect" onClick={join} />
           )}
         </form>
       </div>
