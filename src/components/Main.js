@@ -42,16 +42,21 @@ export default function Main() {
   useEffect(() => {
     if (user.connected) {
       console.log("Connection established", user);
+
       socket.on("disconnect", (data) => {
         console.log("someone disconnected ", data);
         setConnectedUser({ ...connectedUsers, ...data.connected_users });
       });
+
       socket.on("error", (data) => {
         console.log("there was an error: ", data);
       });
+
       socket.on("joined", (data) => {
-        console.log("Someone Joined", data);
-        setConnectedUser({ ...connectedUsers, ...data.connected_users });
+        if (user.joined === false) {
+          console.log("Someone Joined", data);
+          setConnectedUser({ ...connectedUsers, ...data.connected_users });
+        }
       });
     }
   }, [user.connected]);
