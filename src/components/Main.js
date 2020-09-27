@@ -8,9 +8,6 @@ const ENDPOINT = "http://127.0.0.1:5000/";
 export default function Main() {
   const [socket, setSocket] = useState(undefined);
   const [connectedUsers, setConnectedUser] = useState({});
-
-  // socket listener
-
   const [user, setUser] = useState({
     connected: false,
     joined: false,
@@ -18,8 +15,6 @@ export default function Main() {
     username: "",
     sid: "",
   });
-
-  // set username. Setting username will display also the submit button
 
   const handleChange = (e) => {
     setUser({
@@ -87,9 +82,10 @@ export default function Main() {
 
   return (
     <Layout>
-      <div>
+      <div className="main">
         <form>
           <input
+            className="primary-inp"
             type="text"
             id="username"
             value={user.username}
@@ -97,9 +93,18 @@ export default function Main() {
             placeholder="username"
           />
           {user.username && (
-            <input type="button" value="connect" onClick={join} />
+            <input
+              className="primary-btn"
+              type="button"
+              value="connect"
+              onClick={join}
+            />
           )}
         </form>
+        <div className="brand">
+          <img src="/assets/logo.png" />
+        </div>
+        <button className="primary-btn">disconnect</button>
       </div>
       {Object.keys(connectedUsers).length > 0 && (
         <Dashboard

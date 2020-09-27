@@ -6,6 +6,7 @@
     justify-content: space-between;
     padding: $sp-md;
     margin: $sp-sm;
+    background-color: $first-secondary;
 }
 
 .onlineUsers {
@@ -29,5 +30,13 @@
     &:hover {
         background-color: $selected-btn;
         color: $primary-btn;
+    }
+}
+
+.brand {
+    height: $sz-md;
+
+    img {
+        height: 100%;
     }
 }

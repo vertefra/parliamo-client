@@ -23,6 +23,7 @@ export default function Dashboard(props) {
   };
 
   const sendMessage = (message) => {
+    console.log("send message");
     const msg = {
       recipient_sid: friend.sid,
       recipient_username: friend.username,

@@ -1,3 +1,5 @@
+@import url('https://fonts.googleapis.com/css2?family=Roboto&display=swap');
+
 /* SPACINGS */
 
 $sp-sm: 5px;
@@ -13,3 +15,39 @@ $sz-xl: 180px;
 
 $primary-btn: purple;
 $selected-btn: darken($primary-btn, 5%);
+
+$first-primary: #00d4cb;
+$first-secondary: #e7fbfa;
+
+$second-primary: #0f171f;
+$second-secondary: #18222e;
+
+$highl: #ff5f00;
+$offHig: #baafd7;
+
+/* fonts */
+
+$roboto: 'Roboto',
+sans-serif;
+
+$fnt-sm: 15px;
+$fnt-md: 22px;
+$fnt-lg: 30px;
+
+.primary-btn {
+    border: none;
+    background-color: $second-primary;
+    color: $highl;
+    cursor: pointer;
+    padding: $sp-sm $sp-md;
+    font-size: $fnt-md;
+    font-family: $roboto;
+}
+
+.primary-inp {
+    padding: $sp-sm $sp-md;
+    color: $highl;
+    font-size: $fnt-md;
+    font-family: $roboto;
+
+}
