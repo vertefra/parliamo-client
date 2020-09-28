@@ -18,6 +18,7 @@ export default function Dashboard(props) {
   // is sent to TextArea component to be rendered
 
   const establishConnection = (e) => {
+    console.log("establishing connection with: ", e.target.id);
     const amigo = props.connectedUsers[e.target.id];
     setFriend(amigo);
   };
@@ -35,18 +36,18 @@ export default function Dashboard(props) {
     socket.emit("message_to", msg);
     socket.on("ok_status", (data) => {
       if (data) {
-        if (conversations[friend.sid]) {
+        if (conversations[friend.username]) {
           console.log("update");
-          const newData = [...conversations[friend.sid], msg];
+          const newData = [...conversations[friend.username], msg];
           setConversations({
             ...conversations,
-            [friend.sid]: newData,
+            [friend.username]: newData,
           });
         } else {
-          console.log("create", friend.sid);
+          console.log("create", friend.username);
           setConversations({
             ...conversations,
-            [friend.sid]: [msg],
+            [friend.username]: [msg],
           });
         }
         socket.off("ok_status");
@@ -69,18 +70,18 @@ export default function Dashboard(props) {
       // from here I received a message. If it's an open coversation ok, but
       // if it's not I need to open a conversation in conversations object
 
-      if (conversations[data.sender_sid]) {
+      if (conversations[data.sender_username]) {
         console.log("update");
-        const newData = [...conversations[data.sender_sid], data];
+        const newData = [...conversations[data.sender_username], data];
         setConversations({
           ...conversations,
-          [data.sender_sid]: newData,
+          [data.sender_username]: newData,
         });
       } else {
         console.log("create");
         setConversations({
           ...conversations,
-          [data.sender_sid]: [data],
+          [data.sender_username]: [data],
         });
       }
     });
@@ -95,17 +96,16 @@ export default function Dashboard(props) {
       <ul className="onlineUsers">
         <h1>Hello {user.username}!</h1>
         <h1>online now:</h1>
-        {Object.keys(props.connectedUsers).map((sid) => {
-          if (sid !== user.sid)
+        {Object.keys(props.connectedUsers).map((username) => {
+          if (username !== user.username)
             return (
-              <li key={sid}>
+              <li key={username}>
                 <div
                   className="userButton"
-                  id={sid}
-                  name={props.connectedUsers[sid].username}
+                  id={username}
                   onClick={establishConnection}
                 >
-                  {props.connectedUsers[sid].username}
+                  {props.connectedUsers[username].username}
                 </div>
               </li>
             );
@@ -115,7 +115,7 @@ export default function Dashboard(props) {
         user={user}
         friend={friend}
         sendMessage={sendMessage}
-        conversation={conversations[friend.sid]}
+        conversation={conversations[friend.username]}
       />
     </div>
   );

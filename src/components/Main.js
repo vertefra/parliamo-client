@@ -33,7 +33,19 @@ export default function Main() {
         signUpUsername,
       });
       if (resp) {
-        join();
+        // joining after positive response
+
+        try {
+          const resp = await axios.post(`${albert_auth_server}/join`, {
+            username: signUpUsername,
+          });
+          setUser({
+            ...user,
+            username: resp.data.username,
+          });
+        } catch (err) {
+          console.log(err);
+        }
       }
     } catch (err) {
       console.log(err);
@@ -46,7 +58,11 @@ export default function Main() {
     e.preventDefault();
     try {
       const resp = await axios.post(`${albert_auth_server}/join`, { username });
-      console.log(resp);
+      setUser({
+        ...user,
+        username: resp.data.username,
+      });
+      socket.emit("join", { user });
     } catch (err) {
       console.log(err);
     }
@@ -99,6 +115,12 @@ export default function Main() {
     console.log("Instanciating socket");
     setSocket(io.connect(chat_server, { reconnection: true }));
   }, []);
+
+  useEffect(() => {
+    if (user.username) {
+      socket.emit("join", { user });
+    }
+  }, [user.username]);
 
   return (
     <Layout>
