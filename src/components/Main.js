@@ -3,11 +3,14 @@ import io from "socket.io-client";
 import Layout from "./layout/Layout";
 import Dashboard from "./dashboard/Dashboard";
 import "./Main.scss";
-const ENDPOINT = "http://127.0.0.1:5000/";
+import axios from "axios";
+import { chat_server, albert_auth_server } from "../config";
 
 export default function Main() {
   const [socket, setSocket] = useState(undefined);
   const [connectedUsers, setConnectedUser] = useState({});
+  const [signUpUsername, setSignUpUsername] = useState("");
+  const [username, setUsername] = useState("");
   const [user, setUser] = useState({
     connected: false,
     joined: false,
@@ -16,20 +19,37 @@ export default function Main() {
     sid: "",
   });
 
-  const handleChange = (e) => {
-    setUser({
-      ...user,
-      [e.target.id]: e.target.value,
-    });
+  // const handleChange = (e) => {
+  //   setUser({
+  //     ...user,
+  //     [e.target.id]: e.target.value,
+  //   });
+  // };
+
+  const signUp = async (e) => {
+    e.preventDefault();
+    try {
+      const resp = await axios.post(`${albert_auth_server}/signup`, {
+        signUpUsername,
+      });
+      if (resp) {
+        join();
+      }
+    } catch (err) {
+      console.log(err);
+    }
   };
 
   // join function will assign a username and a id and set your status as connected on the server
 
-  const join = (e) => {
+  const join = async (e) => {
     e.preventDefault();
-    socket.emit("join", { user }, (data) => {
-      console.log(data);
-    });
+    try {
+      const resp = await axios.post(`${albert_auth_server}/join`, { username });
+      console.log(resp);
+    } catch (err) {
+      console.log(err);
+    }
   };
 
   // sockets event listeners
@@ -77,25 +97,43 @@ export default function Main() {
 
   useEffect(() => {
     console.log("Instanciating socket");
-    setSocket(io.connect(ENDPOINT, { reconnection: true }));
+    setSocket(io.connect(chat_server, { reconnection: true }));
   }, []);
 
   return (
     <Layout>
       <div className="main">
         <form>
+          <label htmlFor="username">Sign up with existing email</label>
           <input
             className="primary-inp"
-            type="text"
+            type="email"
             id="username"
-            value={user.username}
-            onChange={handleChange}
+            value={signUpUsername}
+            onChange={(e) => setSignUpUsername(e.target.value)}
             placeholder="username"
           />
-          {user.username && (
+          {signUpUsername && (
             <input
               className="primary-btn"
-              type="button"
+              type="submit"
+              value="connect"
+              onClick={signUp}
+            />
+          )}
+          <label htmlFor="join">join with your email</label>
+          <input
+            className="primary-inp"
+            type="email"
+            id="join"
+            value={username}
+            onChange={(e) => setUsername(e.target.value)}
+            placeholder="username"
+          />
+          {username && (
+            <input
+              className="primary-btn"
+              type="submit"
               value="connect"
               onClick={join}
             />
