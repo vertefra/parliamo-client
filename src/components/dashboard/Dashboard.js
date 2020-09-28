@@ -1,4 +1,6 @@
 import React, { useEffect, useState } from "react";
+import { compareFunction, isaac_query_service } from "../../config";
+import axios from "axios";
 import TextArea from "./TextArea";
 
 export default function Dashboard(props) {
@@ -10,21 +12,40 @@ export default function Dashboard(props) {
 
   const { user, socket } = props;
 
-  // establishConnection FUNCTION: read the id of the user selected for the conversation at grabs
-  // it from the object of active user setting it as "friend". selecting a "friend" express the will
+  // establishConnection FUNCTION: read the username of the user selected for the conversation and grabs
+  // it from the object of connectedUser set it as "friend". selecting a "friend" express the will
   // of the user to start a conversation with him. If a conversation is already active in the
   // conversations object it will update it otherwise it will create a new one. Every time that the
   // user selects a new "friend", the props with friend details and the relative conversation
   // is sent to TextArea component to be rendered
 
-  const establishConnection = (e) => {
+  const establishConnection = async (e) => {
     console.log("establishing connection with: ", e.target.id);
+
+    // query all the history for the selected user
+
     const amigo = props.connectedUsers[e.target.id];
     setFriend(amigo);
+    try {
+      const res = await axios.get(
+        `${isaac_query_service}/query?user=${user.username}&friend=${e.target.id}`
+      );
+      console.log(res.data);
+      console.log(amigo.username);
+      console.log("create", amigo.username);
+      setConversations({
+        ...conversations,
+        [amigo.username]: [...res.data.messages],
+      });
+      // }
+    } catch (err) {
+      console.log(err);
+    }
   };
 
   const sendMessage = (message) => {
     console.log("send message");
+
     const msg = {
       recipient_sid: friend.sid,
       recipient_username: friend.username,
@@ -33,12 +54,13 @@ export default function Dashboard(props) {
       timestamp: Date.now(),
       message,
     };
+
     socket.emit("message_to", msg);
     socket.on("ok_status", (data) => {
       if (data) {
         if (conversations[friend.username]) {
           console.log("update");
-          const newData = [...conversations[friend.username], msg];
+          const newData = [msg, ...conversations[friend.username]];
           setConversations({
             ...conversations,
             [friend.username]: newData,
@@ -65,8 +87,7 @@ export default function Dashboard(props) {
 
   useEffect(() => {
     socket.on("dispatched_message", (data) => {
-      console.log(data);
-
+      console.log(conversations);
       // from here I received a message. If it's an open coversation ok, but
       // if it's not I need to open a conversation in conversations object
 
@@ -91,13 +112,17 @@ export default function Dashboard(props) {
     return () => socket.off("dispatched_message");
   }, [conversations]);
 
+  useEffect(() => {
+    console.log(conversations);
+  });
+
   return (
     <div id="dashboard">
       <ul className="onlineUsers">
         <h1>Hello {user.username}!</h1>
         <h1>online now:</h1>
         {Object.keys(props.connectedUsers).map((username) => {
-          if (username !== user.username)
+          if (username !== user.username && username)
             return (
               <li key={username}>
                 <div

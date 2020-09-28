@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+import { compareFunction } from "../../config";
 
 export default function TextArea(props) {
   const [message, setMessage] = useState("");
@@ -29,7 +30,7 @@ export default function TextArea(props) {
       </form>
       <div className="conversation"></div>
       {conversation && conversation.length >= 0
-        ? conversation.map((msg) => {
+        ? conversation.sort(compareFunction).map((msg) => {
             {
               const msgClass =
                 msg.sender_sid === user.sid ? "sentMessage" : "receivedMessage";
