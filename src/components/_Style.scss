@@ -5,6 +5,7 @@
 $sp-sm: 5px;
 $sp-md: 15px;
 $sp-lg: 30px;
+$sp-xl: 50px;
 
 $sz-sm: 20px;
 $sz-md: 80px;
@@ -36,16 +37,29 @@ $fnt-lg: 30px;
 
 .primary-btn {
     border: none;
-    background-color: $second-primary;
-    color: $highl;
+    background-color: $first-primary;
+    color: $second-primary;
     cursor: pointer;
+    outline: none;
     padding: $sp-sm $sp-md;
     font-size: $fnt-md;
     font-family: $roboto;
+    border-radius: 5px;
+    box-shadow: 1px 1px 2px $second-primary,
+        2px 2px 2px $second-primary,
+        3px 3px 3px $second-primary;
+
+    &:active {
+        box-shadow: 1px 1px $second-primary;
+        outline: none;
+        transform: scale(0.98);
+    }
 }
+
 
 .primary-inp {
     padding: $sp-sm $sp-md;
+    width: 50%;
     color: $highl;
     font-size: $fnt-md;
     font-family: $roboto;

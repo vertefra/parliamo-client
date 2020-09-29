@@ -10,7 +10,16 @@ const compareFunction = (a, b) => {
   }
 };
 
+const dateOptionsMsg = {
+  day: "2-digit",
+  month: "short",
+  year: "2-digit",
+  hour: "2-digit",
+  minute: "2-digit",
+};
+
 export {
+  dateOptionsMsg,
   albert_auth_server,
   chat_server,
   isaac_query_service,

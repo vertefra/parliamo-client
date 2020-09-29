@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { compareFunction, isaac_query_service } from "../../config";
+import { isaac_query_service } from "../../config";
 import axios from "axios";
 import TextArea from "./TextArea";
 
@@ -23,23 +23,26 @@ export default function Dashboard(props) {
     console.log("establishing connection with: ", e.target.id);
 
     // query all the history for the selected user
-
-    const amigo = props.connectedUsers[e.target.id];
-    setFriend(amigo);
-    try {
-      const res = await axios.get(
-        `${isaac_query_service}/query?user=${user.username}&friend=${e.target.id}`
-      );
-      console.log(res.data);
-      console.log(amigo.username);
-      console.log("create", amigo.username);
-      setConversations({
-        ...conversations,
-        [amigo.username]: [...res.data.messages],
-      });
-      // }
-    } catch (err) {
-      console.log(err);
+    if (user.username) {
+      const amigo = props.connectedUsers[e.target.id];
+      setFriend(amigo);
+      try {
+        const res = await axios.get(
+          `${isaac_query_service}/query?user=${user.username}&friend=${e.target.id}`
+        );
+        console.log(res.data);
+        console.log(amigo.username);
+        console.log("create", amigo.username);
+        setConversations({
+          ...conversations,
+          [amigo.username]: [...res.data.messages],
+        });
+        // }
+      } catch (err) {
+        console.log(err);
+      }
+    } else {
+      console.log("LOGIN OR SIGN UP PLEASE");
     }
   };
 
@@ -112,14 +115,10 @@ export default function Dashboard(props) {
     return () => socket.off("dispatched_message");
   }, [conversations]);
 
-  useEffect(() => {
-    console.log(conversations);
-  });
-
   return (
-    <div id="dashboard">
+    <>
       <ul className="onlineUsers">
-        <h1>Hello {user.username}!</h1>
+        <h1>Wellcome {user.username}!</h1>
         <h1>online now:</h1>
         {Object.keys(props.connectedUsers).map((username) => {
           if (username !== user.username && username)
@@ -142,6 +141,6 @@ export default function Dashboard(props) {
         sendMessage={sendMessage}
         conversation={conversations[friend.username]}
       />
-    </div>
+    </>
   );
 }

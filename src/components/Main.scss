@@ -7,22 +7,54 @@
     font-family: $roboto;
 }
 
-body {
-    background-color: $second-secondary;
+#main-wrapper {
+    height: 100vh;
+    background-color: $first-secondary;
 }
 
-h1 {
-    font-size: 20px;
-}
-
-ul {
-    list-style: none;
-}
-
-.main {
-    background-color: $first-primary;
-    padding: $sp-sm;
+.formField {
+    background-color: $first-secondary;
+    padding: 0 $sp-xl;
+    height: 80px;
     display: flex;
+    align-items: center;
+    justify-content: space-between;
+    border-bottom: 4px solid $first-primary;
+}
+
+.hidingBtn {
+    height: 90px;
+    display: flex;
+    padding: $sp-sm;
+    justify-content: center;
+    align-items: center;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+}
+
+.brand {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    img {
+        width: 70%;
+    }
+}
+
+.alert {
+    display: flex;
+    flex-direction: row-reverse;
     justify-content: space-between;
     align-items: center;
+    width: 100%;
+    height: 50%;
+    padding: $sp-sm;
+}
+
+
+
+.main {
+    form {}
 }

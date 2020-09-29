@@ -13,7 +13,7 @@ const routes = [
 
 function App() {
   return (
-    <div className="App">
+    <>
       <BrowserRouter>
         {routes.map((route) => {
           return (
@@ -26,7 +26,7 @@ function App() {
           );
         })}
       </BrowserRouter>
-    </div>
+    </>
   );
 }
 

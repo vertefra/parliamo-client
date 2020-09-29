@@ -1,16 +1,18 @@
+import { chat_server, albert_auth_server } from "../config";
 import React, { useEffect, useState } from "react";
 import io from "socket.io-client";
-import Layout from "./layout/Layout";
-import Dashboard from "./dashboard/Dashboard";
-import "./Main.scss";
 import axios from "axios";
-import { chat_server, albert_auth_server } from "../config";
+
+import Dashboard from "./dashboard/Dashboard";
+import Layout from "./layout/Layout";
+import "./Main.scss";
 
 export default function Main() {
   const [socket, setSocket] = useState(undefined);
   const [connectedUsers, setConnectedUser] = useState({});
   const [signUpUsername, setSignUpUsername] = useState("");
   const [username, setUsername] = useState("");
+  const [error, setError] = useState("");
   const [user, setUser] = useState({
     connected: false,
     joined: false,
@@ -19,36 +21,45 @@ export default function Main() {
     sid: "",
   });
 
-  // const handleChange = (e) => {
-  //   setUser({
-  //     ...user,
-  //     [e.target.id]: e.target.value,
-  //   });
-  // };
+  const closeError = (e) => {
+    e.preventDefault();
+    setError("");
+  };
 
   const signUp = async (e) => {
     e.preventDefault();
-    try {
-      const resp = await axios.post(`${albert_auth_server}/signup`, {
-        signUpUsername,
-      });
-      if (resp) {
-        // joining after positive response
+    if (signUpUsername.includes("@")) {
+      try {
+        const resp = await axios.post(`${albert_auth_server}/signup`, {
+          signUpUsername,
+        });
+        if (resp) {
+          // joining after positive response
 
-        try {
-          const resp = await axios.post(`${albert_auth_server}/join`, {
-            username: signUpUsername,
-          });
-          setUser({
-            ...user,
-            username: resp.data.username,
-          });
-        } catch (err) {
-          console.log(err);
+          try {
+            const resp = await axios.post(`${albert_auth_server}/join`, {
+              username: signUpUsername,
+            });
+            setUser({
+              ...user,
+              username: resp.data.username,
+              joined: true,
+            });
+            setUsername("");
+            setSignUpUsername("");
+          } catch (err) {
+            console.log(err);
+          }
         }
+      } catch (err) {
+        setError("Is the email already in use?");
+        setUsername("");
+        setSignUpUsername("");
       }
-    } catch (err) {
-      console.log(err);
+    } else {
+      setError("invalid email address!");
+      setUsername("");
+      setSignUpUsername("");
     }
   };
 
@@ -58,14 +69,32 @@ export default function Main() {
     e.preventDefault();
     try {
       const resp = await axios.post(`${albert_auth_server}/join`, { username });
+      console.log(resp.data);
       setUser({
         ...user,
         username: resp.data.username,
+        joined: true,
       });
       socket.emit("join", { user });
     } catch (err) {
-      console.log(err);
+      setError("Login Failed. Did you Sign up already?");
     }
+    setUsername("");
+    setSignUpUsername("");
+  };
+
+  const disconnect = (e) => {
+    e.preventDefault();
+    socket.disconnect(`${chat_server}`);
+    setUser({
+      connected: false,
+      joined: false,
+      auth: true,
+      username: "",
+      sid: "",
+    });
+    socket.off("connected");
+    window.location.reload();
   };
 
   // sockets event listeners
@@ -75,20 +104,16 @@ export default function Main() {
       "IF YOU SEE MORE THAN 2 TIMES THIS MESSAGE SOMETHING IS WRONG WITH THE USE EFFECT FOR SOCKET IO"
     );
     if (user.connected) {
-      console.log("Connection established", user);
-
       socket.on("disconnect", (data) => {
-        console.log("someone disconnected ", data);
         setConnectedUser({ ...connectedUsers, ...data.connected_users });
       });
 
       socket.on("error", (data) => {
-        console.log("there was an error: ", data);
+        setError(data);
       });
 
       socket.on("joined", (data) => {
         if (user.joined === false) {
-          console.log("Someone Joined", data);
           setConnectedUser({ ...connectedUsers, ...data.connected_users });
         }
       });
@@ -126,53 +151,101 @@ export default function Main() {
     <Layout>
       <div className="main">
         <form>
-          <label htmlFor="username">Sign up with existing email</label>
-          <input
-            className="primary-inp"
-            type="email"
-            id="username"
-            value={signUpUsername}
-            onChange={(e) => setSignUpUsername(e.target.value)}
-            placeholder="username"
-          />
-          {signUpUsername && (
-            <input
-              className="primary-btn"
-              type="submit"
-              value="connect"
-              onClick={signUp}
-            />
-          )}
-          <label htmlFor="join">join with your email</label>
-          <input
-            className="primary-inp"
-            type="email"
-            id="join"
-            value={username}
-            onChange={(e) => setUsername(e.target.value)}
-            placeholder="username"
-          />
-          {username && (
-            <input
-              className="primary-btn"
-              type="submit"
-              value="connect"
-              onClick={join}
-            />
-          )}
+          {!user.joined ? (
+            <>
+              <div className="formField">
+                <label htmlFor="username">Signup</label>
+                <input
+                  className="primary-inp"
+                  type="email"
+                  id="username"
+                  value={signUpUsername}
+                  onChange={(e) => {
+                    setSignUpUsername(e.target.value);
+                    setUsername("");
+                  }}
+                  placeholder="username"
+                  autoComplete="off"
+                />
+              </div>
+              <div className="formField">
+                <label htmlFor="join">Login</label>
+                <input
+                  className="primary-inp"
+                  type="email"
+                  id="join"
+                  value={username}
+                  onChange={(e) => {
+                    setSignUpUsername("");
+                    setUsername(e.target.value);
+                  }}
+                  placeholder="username"
+                  autoComplete="off"
+                />
+              </div>
+              {console.log(user)}
+            </>
+          ) : null}
+
+          {/* comunications and hide/appear buttons */}
+          {/* error comunications */}
+
+          <div className="hidingBtn">
+            {error && (
+              <div className="alert">
+                <button className="primary-btn" onClick={closeError}>
+                  x
+                </button>
+                <p>{error}</p>
+              </div>
+            )}
+
+            {/* login button */}
+
+            {username && !error && (
+              <input
+                className="primary-btn"
+                type="submit"
+                value="login"
+                onClick={join}
+              />
+            )}
+
+            {/* signUp button  */}
+
+            {signUpUsername && !error && (
+              <input
+                className="primary-btn"
+                type="submit"
+                value="signup"
+                onClick={signUp}
+              />
+            )}
+
+            {/* disconnect button  */}
+
+            {user.joined && !error && (
+              <button className="primary-btn disconnect" onClick={disconnect}>
+                disconnect
+              </button>
+            )}
+          </div>
+
+          {/* end */}
         </form>
         <div className="brand">
           <img src="/assets/logo.png" />
         </div>
-        <button className="primary-btn">disconnect</button>
       </div>
-      {Object.keys(connectedUsers).length > 0 && (
-        <Dashboard
-          connectedUsers={connectedUsers}
-          socket={socket}
-          user={user}
-        />
-      )}
+      <div id="dashboard">
+        {Object.keys(connectedUsers).length > 0 && user.joined && (
+          <Dashboard
+            connectedUsers={connectedUsers}
+            socket={socket}
+            user={user}
+          />
+        )}
+      </div>
     </Layout>
   );
 }

@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { compareFunction } from "../../config";
+import { compareFunction, dateOptionsMsg } from "../../config";
 
 export default function TextArea(props) {
   const [message, setMessage] = useState("");
@@ -34,14 +34,18 @@ export default function TextArea(props) {
             {
               const msgClass =
                 msg.sender_sid === user.sid ? "sentMessage" : "receivedMessage";
-
+              const msgTimestamp = new Date(msg.timestamp).toLocaleString(
+                "en-US",
+                dateOptionsMsg
+              );
+              console.log(msgTimestamp);
               return (
                 <div className={msgClass} key={msg.timestamp}>
                   <header>
                     {msgClass === "sentMessage"
                       ? "you: "
                       : `${msg.sender_username}`}
-                    {msg.timestamp}
+                    {msgTimestamp}
                   </header>
                   <p>{msg.message}</p>
                 </div>
