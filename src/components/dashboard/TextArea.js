@@ -9,13 +9,16 @@ export default function TextArea(props) {
   return (
     <div className="textArea">
       <form>
-        <label htmlFor="textArea">
-          {friend.username && `chat with ${friend.username}`}
-        </label>
-        <div>
+        <div className="hiddenLabel">
+          {friend.username && (
+            <div className="card">{`chat with ${friend.username}`}</div>
+          )}
+        </div>
+        <div className="sendMessage">
           <textarea
             id="textArea"
             value={message}
+            className="primary-inp"
             onChange={(e) => setMessage(e.target.value)}
           ></textarea>
           <input
@@ -25,34 +28,39 @@ export default function TextArea(props) {
               sendMessage(message);
               setMessage("");
             }}
+            className="primary-btn"
           />
         </div>
       </form>
-      <div className="conversation"></div>
-      {conversation && conversation.length >= 0
-        ? conversation.sort(compareFunction).map((msg) => {
-            {
-              const msgClass =
-                msg.sender_sid === user.sid ? "sentMessage" : "receivedMessage";
-              const msgTimestamp = new Date(msg.timestamp).toLocaleString(
-                "en-US",
-                dateOptionsMsg
-              );
-              console.log(msgTimestamp);
-              return (
-                <div className={msgClass} key={msg.timestamp}>
-                  <header>
-                    {msgClass === "sentMessage"
-                      ? "you: "
-                      : `${msg.sender_username}`}
-                    {msgTimestamp}
-                  </header>
-                  <p>{msg.message}</p>
-                </div>
-              );
-            }
-          })
-        : "...Loading"}
+      <div className="conversation">
+        {friend.username && conversation && conversation.length >= 0
+          ? conversation.sort(compareFunction).map((msg) => {
+              {
+                const msgClass =
+                  msg.sender_username === user.username
+                    ? "sentMessage"
+                    : "receivedMessage";
+                const msgTimestamp = new Date(msg.timestamp).toLocaleString(
+                  "en-US",
+                  dateOptionsMsg
+                );
+                return (
+                  <div className={`message ${msgClass}`} key={msg.timestamp}>
+                    <header>
+                      <h3>
+                        {msgClass === "sentMessage"
+                          ? "you: "
+                          : `${msg.sender_username}`}
+                      </h3>
+                    </header>
+                    <p>{msg.message}</p>
+                    <footer>{msgTimestamp}</footer>
+                  </div>
+                );
+              }
+            })
+          : null}
+      </div>
     </div>
   );
 }

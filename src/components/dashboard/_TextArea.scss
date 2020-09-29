@@ -1,1 +1,68 @@
 @import '../Style';
+
+.textArea {
+    padding: $sp-md $sp-sm;
+    height: 100%;
+    min-height: 60vh;
+
+    .hiddenLabel {
+        height: $sz-ms;
+    }
+
+    #textArea {
+        resize: none;
+        overflow-x: scroll;
+        width: "40%";
+        margin: $sp-sm 0;
+    }
+
+    .sendMessage {
+        display: flex;
+        flex-direction: column;
+        align-items: flex-start;
+    }
+
+}
+
+.conversation {
+    background-color: $second-secondary;
+    box-shadow: inset 4px 4px 4px $first-secondary,
+        inset -4px -4px 4px $first-secondary;
+    margin-top: $sp-sm;
+    padding: $sp-md;
+    overflow-x: scroll;
+    height: 60vh;
+    display: flex;
+    flex-direction: column;
+}
+
+.message {
+    background-color: $first-secondary;
+    padding: $sp-sm $sp-md;
+    margin: $sp-sm;
+    border-radius: 10px;
+    max-width: 60%;
+
+    h3 {
+        color: $highl;
+        border-bottom: 1px solid $second-secondary;
+    }
+
+    p {
+        font-weight: 700;
+        margin: $sp-sm 0;
+    }
+
+    footer {
+        font-size: $fnt-sm;
+        font-style: italic;
+    }
+}
+
+.receivedMessage {
+    background-color: $first-primary;
+}
+
+.sentMessage {
+    align-self: flex-end;
+}

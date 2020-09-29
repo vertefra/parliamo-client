@@ -54,38 +54,40 @@ export default function Dashboard(props) {
   };
 
   const sendMessage = (message) => {
-    console.log("send message");
+    if (friend.username && friend.sid) {
+      const msg = {
+        recipient_sid: friend.sid,
+        recipient_username: friend.username,
+        sender_sid: user.sid,
+        sender_username: user.username,
+        timestamp: Date.now(),
+        message,
+      };
 
-    const msg = {
-      recipient_sid: friend.sid,
-      recipient_username: friend.username,
-      sender_sid: user.sid,
-      sender_username: user.username,
-      timestamp: Date.now(),
-      message,
-    };
-
-    socket.emit("message_to", msg);
-    socket.on("ok_status", (data) => {
-      if (data) {
-        if (conversations[friend.username]) {
-          console.log("update");
-          const newData = [msg, ...conversations[friend.username]];
-          setConversations({
-            ...conversations,
-            [friend.username]: newData,
-          });
-        } else {
-          console.log("create", friend.username);
-          setConversations({
-            ...conversations,
-            [friend.username]: [msg],
-          });
+      socket.emit("message_to", msg);
+      socket.on("ok_status", (data) => {
+        if (data) {
+          if (conversations[friend.username]) {
+            console.log("update");
+            const newData = [msg, ...conversations[friend.username]];
+            setConversations({
+              ...conversations,
+              [friend.username]: newData,
+            });
+          } else {
+            console.log("create", friend.username);
+            setConversations({
+              ...conversations,
+              [friend.username]: [msg],
+            });
+          }
+          socket.off("ok_status");
+          socket.off("message_to");
         }
-        socket.off("ok_status");
-        socket.off("message_to");
-      }
-    });
+      });
+    } else {
+      setError("Select a recipient first!");
+    }
   };
 
   // SOCKET MESSAGE DISPATCHER: is linked to a useEffect triggered by conversations
@@ -140,9 +142,6 @@ export default function Dashboard(props) {
     return () => socket.off("dispatched_message");
   }, [conversations]);
 
-  useEffect(() => {
-    console.log("incoming messages ", incomingMessage);
-  });
   return (
     <>
       <ul className="onlineUsers">
