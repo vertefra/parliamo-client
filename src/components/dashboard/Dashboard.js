@@ -1,10 +1,15 @@
 import React, { useEffect, useState } from "react";
+import { Icon } from "@iconify/react";
+import userAvatar from "@iconify/icons-carbon/user-online";
+import bxMessageRounded from "@iconify/icons-bx/bx-message-rounded";
 import { isaac_query_service } from "../../config";
 import axios from "axios";
 import TextArea from "./TextArea";
 
 export default function Dashboard(props) {
   const [conversations, setConversations] = useState({});
+  const [error, setError] = props.errorControllers;
+  const [incomingMessage, setIncomingMessages] = useState({});
   const [friend, setFriend] = useState({
     username: "",
     sid: "",
@@ -25,14 +30,15 @@ export default function Dashboard(props) {
     // query all the history for the selected user
     if (user.username) {
       const amigo = props.connectedUsers[e.target.id];
+      setIncomingMessages({
+        ...incomingMessage,
+        [e.target.id]: false,
+      });
       setFriend(amigo);
       try {
         const res = await axios.get(
           `${isaac_query_service}/query?user=${user.username}&friend=${e.target.id}`
         );
-        console.log(res.data);
-        console.log(amigo.username);
-        console.log("create", amigo.username);
         setConversations({
           ...conversations,
           [amigo.username]: [...res.data.messages],
@@ -40,9 +46,10 @@ export default function Dashboard(props) {
         // }
       } catch (err) {
         console.log(err);
+        setError("something went wrong. Please try again");
       }
     } else {
-      console.log("LOGIN OR SIGN UP PLEASE");
+      setError("Login or Sign up!");
     }
   };
 
@@ -101,8 +108,26 @@ export default function Dashboard(props) {
           ...conversations,
           [data.sender_username]: newData,
         });
+
+        // this will set the key with the sender username in incoming messages
+        // to true, triggering the rendering of thje new message icon
+
+        setIncomingMessages({
+          ...incomingMessage,
+          [data.sender_username]: true,
+        });
+
+        //=====================================================================
       } else {
         console.log("create");
+        console.log(
+          "message receive set incoming message to true for ",
+          data.sender_username
+        );
+        setIncomingMessages({
+          ...incomingMessage,
+          [data.sender_username]: true,
+        });
         setConversations({
           ...conversations,
           [data.sender_username]: [data],
@@ -115,6 +140,9 @@ export default function Dashboard(props) {
     return () => socket.off("dispatched_message");
   }, [conversations]);
 
+  useEffect(() => {
+    console.log("incoming messages ", incomingMessage);
+  });
   return (
     <>
       <ul className="onlineUsers">
@@ -125,11 +153,20 @@ export default function Dashboard(props) {
             return (
               <li key={username}>
                 <div
-                  className="userButton"
+                  className="userButton card"
                   id={username}
                   onClick={establishConnection}
                 >
-                  {props.connectedUsers[username].username}
+                  <div className="avatarIcon">
+                    <Icon icon={userAvatar} color="black" />
+                  </div>
+
+                  <p>{props.connectedUsers[username].username}</p>
+                  {incomingMessage[username] && (
+                    <div className="incomingMessage">
+                      <Icon icon={bxMessageRounded} />
+                    </div>
+                  )}
                 </div>
               </li>
             );

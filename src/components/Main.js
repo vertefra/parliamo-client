@@ -48,7 +48,9 @@ export default function Main() {
             setUsername("");
             setSignUpUsername("");
           } catch (err) {
-            console.log(err);
+            setError(err);
+            setUsername("");
+            setSignUpUsername("");
           }
         }
       } catch (err) {
@@ -69,7 +71,6 @@ export default function Main() {
     e.preventDefault();
     try {
       const resp = await axios.post(`${albert_auth_server}/join`, { username });
-      console.log(resp.data);
       setUser({
         ...user,
         username: resp.data.username,
@@ -183,7 +184,6 @@ export default function Main() {
                   autoComplete="off"
                 />
               </div>
-              {console.log(user)}
             </>
           ) : null}
 
@@ -233,13 +233,16 @@ export default function Main() {
 
           {/* end */}
         </form>
-        <div className="brand">
-          <img src="/assets/logo.png" />
-        </div>
+        {!user.joined && (
+          <div className="brand">
+            <img src="/assets/logo.png" />
+          </div>
+        )}
       </div>
       <div id="dashboard">
         {Object.keys(connectedUsers).length > 0 && user.joined && (
           <Dashboard
+            errorControllers={[error, setError]}
             connectedUsers={connectedUsers}
             socket={socket}
             user={user}

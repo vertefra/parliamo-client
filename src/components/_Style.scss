@@ -65,3 +65,11 @@ $fnt-lg: 30px;
     font-family: $roboto;
 
 }
+
+.card {
+    border: 1px solid $second-primary;
+    padding: $sp-sm;
+    margin: $sp-sm;
+    box-shadow: 4px 4px 4px $first-primary;
+    cursor: pointer;
+}

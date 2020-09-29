@@ -1,11 +1,59 @@
-@import '../Style';
+@import "../Style";
 
 .onlineUsers {
     list-style: none;
+    width: 80%;
+    margin: 0 auto;
+    background-color: lighten($second-primary, 20%);
+    max-height: 400px;
+    overflow-y: scroll;
+    border-radius: 4px;
+    box-shadow: 4px 4px 4px black;
 
     h1 {
         font-size: $fnt-sm;
         padding: $sp-sm;
         background-color: $first_primary;
+        text-align: center;
+    }
+
+    h2 {
+        margin: $sp-sm $sp-md;
+        font-size: $fnt-sm;
+        color: $highl;
+    }
+
+    li {
+        padding: $sp-sm;
+    }
+}
+
+.userButton {
+    width: 80%;
+    height: 40px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+
+    .avatarIcon {
+        background-color: #2ff530;
+        padding: $sp-sm;
+        border-radius: 40%;
+        margin-left: $sp-sm;
+        pointer-events: none;
+    }
+
+    p {
+        color: $highl;
+        text-decoration: underline;
+        pointer-events: none;
+    }
+
+    .incomingMessage {
+        pointer-events: none;
+        background-color: red;
+        padding: $sp-sm;
+        border-radius: 40%;
+        margin-left: $sp-sm;
     }
 }
