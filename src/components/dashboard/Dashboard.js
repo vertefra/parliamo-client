@@ -118,8 +118,8 @@ export default function Dashboard(props) {
   return (
     <>
       <ul className="onlineUsers">
-        <h1>Wellcome {user.username}!</h1>
-        <h1>online now:</h1>
+        <h1>connected as: {user.username}</h1>
+        <h2>online now:</h2>
         {Object.keys(props.connectedUsers).map((username) => {
           if (username !== user.username && username)
             return (

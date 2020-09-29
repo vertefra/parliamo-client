@@ -1,1 +1,11 @@
 @import '../Style';
+
+.onlineUsers {
+    list-style: none;
+
+    h1 {
+        font-size: $fnt-sm;
+        padding: $sp-sm;
+        background-color: $first_primary;
+    }
+}
