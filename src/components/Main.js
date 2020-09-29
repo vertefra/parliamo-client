@@ -135,7 +135,7 @@ export default function Main() {
         }
       });
     }
-  }, [socket]);
+  }, [socket, user]);
 
   useEffect(() => {
     console.log("Instanciating socket");
@@ -146,7 +146,7 @@ export default function Main() {
     if (user.username) {
       socket.emit("join", { user });
     }
-  }, [user.username]);
+  }, [user.username, socket, user]);
 
   return (
     <Layout>
@@ -235,7 +235,7 @@ export default function Main() {
         </form>
         {!user.joined && (
           <div className="brand">
-            <img src="/assets/logo.png" />
+            <img src="/assets/logo.png" alt="logo" />
           </div>
         )}
       </div>

@@ -1,6 +1,5 @@
 import React from "react";
-import { BrowserRouter, Route, Switch } from "react-router-dom";
-import Dashboard from "./components/dashboard/Dashboard";
+import { BrowserRouter, Route } from "react-router-dom";
 import Main from "./components/Main";
 
 const routes = [

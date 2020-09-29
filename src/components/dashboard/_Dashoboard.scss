@@ -62,3 +62,33 @@
         margin-left: $sp-sm;
     }
 }
+
+@media only screen and (min-width: 600px) {
+    #dashboard {
+        display: flex;
+        align-items: flex-start;
+        height: 100vh;
+    }
+
+    .onlineUsers {
+        width: 50%;
+        max-height: 80vh;
+        height: 100%;
+        overflow-y: auto;
+        border-radius: 6px;
+
+        h1 {
+            font-size: $fnt-md;
+            padding: $sp-sm;
+        }
+
+        h2 {
+            margin: $sp-sm $sp-md;
+            font-size: $fnt-md;
+        }
+
+        li {
+            padding: $sp-sm;
+        }
+    }
+}

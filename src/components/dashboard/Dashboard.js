@@ -8,7 +8,7 @@ import TextArea from "./TextArea";
 
 export default function Dashboard(props) {
   const [conversations, setConversations] = useState({});
-  const [error, setError] = props.errorControllers;
+  const [setError] = props.errorControllers;
   const [incomingMessage, setIncomingMessages] = useState({});
   const [friend, setFriend] = useState({
     username: "",
@@ -83,6 +83,8 @@ export default function Dashboard(props) {
           }
           socket.off("ok_status");
           socket.off("message_to");
+        } else {
+          console.log("error");
         }
       });
     } else {
@@ -140,7 +142,7 @@ export default function Dashboard(props) {
     // clean up for socket
 
     return () => socket.off("dispatched_message");
-  }, [conversations]);
+  }, [conversations, incomingMessage, socket]);
 
   return (
     <>

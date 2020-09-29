@@ -45,18 +45,34 @@
     }
 }
 
-.alert {
-    display: flex;
-    flex-direction: row-reverse;
-    justify-content: space-between;
-    align-items: center;
-    width: 100%;
-    height: 50%;
-    padding: $sp-sm;
+
+
+
+@media only screen and (min-width: 600px) {
+    #main-wrapper {
+        width: 100%;
+        margin: 0 auto;
+        height: 100vh;
+        overflow: hidden;
+    }
+
+    .brand {
+        img {
+            width: 40%;
+        }
+    }
+
+    .formField {
+        padding: $sp-xl $sp-xl;
+        height: 80px;
+        justify-content: space-evenly;
+        font-size: $fnt-lg;
+        font-weight: 700;
+    }
 }
 
-
-
-.main {
-    form {}
+@media only screen and(min-width: 1000px) {
+    #main-wrapper {
+        width: 65%;
+    }
 }

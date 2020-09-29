@@ -4,22 +4,39 @@
     padding: $sp-md $sp-sm;
     height: 100%;
     min-height: 60vh;
+    width: 95%;
+    margin: 0 auto;
+
+    form {
+        width: 50%;
+    }
+
 
     .hiddenLabel {
-        height: $sz-ms;
+        height: $sz-md;
+        width: 100%;
+        margin: 0 auto;
     }
 
     #textArea {
         resize: none;
-        overflow-x: scroll;
-        width: "40%";
-        margin: $sp-sm 0;
+        overflow-x: auto;
+        overflow: hidden;
+        width: 65%;
+        height: 20px;
+        margin: $sp-sm $sp-md;
     }
 
     .sendMessage {
         display: flex;
-        flex-direction: column;
+        flex-direction: row;
         align-items: flex-start;
+        width: 100%;
+    }
+
+    .messagesControll {
+        display: flex;
+        width: 100%;
     }
 
 }
@@ -30,7 +47,7 @@
         inset -4px -4px 4px $first-secondary;
     margin-top: $sp-sm;
     padding: $sp-md;
-    overflow-x: scroll;
+    overflow-x: auto;
     height: 60vh;
     display: flex;
     flex-direction: column;
@@ -42,6 +59,7 @@
     margin: $sp-sm;
     border-radius: 10px;
     max-width: 60%;
+    transition: ease-in 1s;
 
     h3 {
         color: $highl;
@@ -65,4 +83,49 @@
 
 .sentMessage {
     align-self: flex-end;
+}
+
+@media only screen and (min-width: 600px) {
+    .textArea {
+        height: 100%;
+        overflow-x: hidden;
+
+        form {
+            width: 80%;
+        }
+
+
+        .hiddenLabel {
+            display: flex;
+            width: 100%;
+            justify-content: center;
+
+            div {
+                display: flex;
+                align-items: center;
+                padding: $sp-lg;
+                font-size: $fnt-md;
+            }
+        }
+
+        #textArea {
+            overflow-x: auto;
+            overflow-y: hidden;
+            width: 90%;
+            height: 40px;
+            font-size: $fnt-md;
+        }
+
+        .sendMessage {
+            align-items: center;
+        }
+
+        .messagesControll {
+            display: flex;
+            align-items: flex-start;
+            justify-content: center;
+            width: 100%;
+        }
+
+    }
 }
