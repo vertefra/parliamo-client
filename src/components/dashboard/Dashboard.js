@@ -8,7 +8,7 @@ import TextArea from "./TextArea";
 
 export default function Dashboard(props) {
   const [conversations, setConversations] = useState({});
-  const [setError] = props.errorControllers;
+  const [error, setError] = props.errorControllers;
   const [incomingMessage, setIncomingMessages] = useState({});
   const [friend, setFriend] = useState({
     username: "",
@@ -25,11 +25,10 @@ export default function Dashboard(props) {
   // is sent to TextArea component to be rendered
 
   const establishConnection = async (e) => {
-    console.log("establishing connection with: ", e.target.id);
-
     // query all the history for the selected user
     if (user.username) {
       const amigo = props.connectedUsers[e.target.id];
+      console.log("establishing connection with: ", amigo);
       setIncomingMessages({
         ...incomingMessage,
         [e.target.id]: false,
@@ -88,7 +87,8 @@ export default function Dashboard(props) {
         }
       });
     } else {
-      setError("Select a recipient first!");
+      console.log("errror");
+      // setError("Select a recipient first!");
     }
   };
 

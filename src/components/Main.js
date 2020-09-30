@@ -31,14 +31,14 @@ export default function Main() {
     if (signUpUsername.includes("@")) {
       try {
         const resp = await axios.post(`${albert_auth_server}/signup`, {
-          signUpUsername,
+          username: signUpUsername,
+          sid: user.sid,
         });
         if (resp) {
-          // joining after positive response
-
           try {
             const resp = await axios.post(`${albert_auth_server}/join`, {
               username: signUpUsername,
+              sid: user.sid,
             });
             setUser({
               ...user,
@@ -68,15 +68,22 @@ export default function Main() {
   // join function will assign a username and a id and set your status as connected on the server
 
   const join = async (e) => {
+    console.log(user);
     e.preventDefault();
     try {
-      const resp = await axios.post(`${albert_auth_server}/join`, { username });
-      setUser({
-        ...user,
-        username: resp.data.username,
-        joined: true,
+      const resp = await axios.post(`${albert_auth_server}/join`, {
+        username,
+        sid: user.sid,
       });
-      socket.emit("join", { user });
+      console.log(resp.data);
+      if (resp) {
+        setUser({
+          ...user,
+          username: resp.data.username,
+          joined: true,
+        });
+        // socket.emit("join", { user });
+      }
     } catch (err) {
       setError("Login Failed. Did you Sign up already?");
     }
@@ -114,6 +121,7 @@ export default function Main() {
       });
 
       socket.on("joined", (data) => {
+        console.log(data);
         if (user.joined === false) {
           setConnectedUser({ ...connectedUsers, ...data.connected_users });
         }
@@ -126,6 +134,7 @@ export default function Main() {
   useEffect(() => {
     if (socket) {
       socket.on("connected", (data) => {
+        console.log(data);
         if (data) {
           setUser({
             ...user,
@@ -142,11 +151,14 @@ export default function Main() {
     setSocket(io.connect(chat_server, { reconnection: true }));
   }, []);
 
-  useEffect(() => {
-    if (user.username) {
-      socket.emit("join", { user });
-    }
-  }, [user.username, socket, user]);
+  // join event is triggered when receive the positive response from the authentication server
+  // in the join function and set username and sid
+
+  // useEffect(() => {
+  //   if (user.username) {
+  //     socket.emit("join", { user });
+  //   }
+  // }, [user.username, socket, user]);
 
   return (
     <Layout>
