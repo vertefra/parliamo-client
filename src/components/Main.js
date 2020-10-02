@@ -1,4 +1,4 @@
-import { chat_server, albert_auth_server } from "../config";
+import { leonardo_chat_server, albert_auth_server } from "../config";
 import React, { useEffect, useState } from "react";
 import io from "socket.io-client";
 import axios from "axios";
@@ -93,7 +93,7 @@ export default function Main() {
 
   const disconnect = (e) => {
     e.preventDefault();
-    socket.disconnect(`${chat_server}`);
+    socket.disconnect(`${leonardo_chat_server}`);
     setUser({
       connected: false,
       joined: false,
@@ -148,7 +148,7 @@ export default function Main() {
 
   useEffect(() => {
     console.log("Instanciating socket");
-    setSocket(io.connect(chat_server, { reconnection: true }));
+    setSocket(io.connect(leonardo_chat_server, { reconnection: true }));
   }, []);
 
   // join event is triggered when receive the positive response from the authentication server
