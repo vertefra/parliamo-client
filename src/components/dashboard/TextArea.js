@@ -11,12 +11,6 @@ export default function TextArea(props) {
     setMessage(e.target.value);
   };
 
-  useEffect(() => {
-    if (conversation && conversation.length > 0) {
-      conversation.sort(compareFunction);
-    }
-  }, [conversation]);
-
   return (
     <div className="textArea">
       {/* // Text area and translation area */}
@@ -52,7 +46,7 @@ export default function TextArea(props) {
 
       <div className="conversation">
         {friend.username && conversation && conversation.length >= 0
-          ? conversation.map((msg) => {
+          ? conversation.sort(compareFunction).map((msg) => {
               const msgClass =
                 msg.sender_username === user.username
                   ? "sentMessage"
