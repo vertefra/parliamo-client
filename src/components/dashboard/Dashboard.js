@@ -38,6 +38,7 @@ export default function Dashboard(props) {
         const res = await axios.get(
           `${isaac_query_service}/query?user=${user.username}&friend=${e.target.id}`
         );
+        res.data.messages.sort(compareFunction);
         setConversations({
           ...conversations,
           [amigo.username]: [...res.data.messages],
@@ -68,6 +69,7 @@ export default function Dashboard(props) {
         if (data) {
           if (conversations[friend.username]) {
             const newData = [msg, ...conversations[friend.username]];
+            newData.sort(compareFunction);
             setConversations({
               ...conversations,
               [friend.username]: newData,
@@ -108,7 +110,7 @@ export default function Dashboard(props) {
         console.log("update");
 
         const newData = [data, ...conversations[data.sender_username]];
-        // newData.sort(compareFunction); // test  test test
+        newData.sort(compareFunction);
         setConversations({
           ...conversations,
           [data.sender_username]: newData,
