@@ -69,7 +69,6 @@ export default function Dashboard(props) {
         if (data) {
           if (conversations[friend.username]) {
             const newData = [msg, ...conversations[friend.username]];
-            newData.sort(compareFunction);
             setConversations({
               ...conversations,
               [friend.username]: newData,
@@ -110,7 +109,6 @@ export default function Dashboard(props) {
         console.log("update");
 
         const newData = [data, ...conversations[data.sender_username]];
-        newData.sort(compareFunction);
         setConversations({
           ...conversations,
           [data.sender_username]: newData,
