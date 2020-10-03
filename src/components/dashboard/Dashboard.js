@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import { Icon } from "@iconify/react";
 import userAvatar from "@iconify/icons-carbon/user-online";
 import bxMessageRounded from "@iconify/icons-bx/bx-message-rounded";
-import { isaac_query_service } from "../../config";
+import { compareFunction, isaac_query_service } from "../../config";
 import axios from "axios";
 import TextArea from "./TextArea";
 
@@ -108,6 +108,7 @@ export default function Dashboard(props) {
         console.log("update");
 
         const newData = [data, ...conversations[data.sender_username]];
+        newData.sort(compareFunction); // test
         setConversations({
           ...conversations,
           [data.sender_username]: newData,
