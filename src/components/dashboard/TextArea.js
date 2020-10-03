@@ -12,7 +12,7 @@ export default function TextArea(props) {
   };
 
   useEffect(() => {
-    if (conversation.length > 0) {
+    if (conversation && conversation.length > 0) {
       conversation.sort(compareFunction);
     }
   }, [conversation]);
