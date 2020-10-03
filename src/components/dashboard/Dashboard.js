@@ -107,19 +107,20 @@ export default function Dashboard(props) {
 
       if (conversations[data.sender_username]) {
         console.log("update");
-        const newData = [...conversations[data.sender_username], data];
+
+        const newData = [data, ...conversations[data.sender_username]];
         setConversations({
           ...conversations,
           [data.sender_username]: newData,
         });
 
-        // this will set the key with the sender username in incoming messages
-        // to true, triggering the rendering of thje new message icon
-
         setIncomingMessages({
           ...incomingMessage,
           [data.sender_username]: true,
         });
+
+        // this will set the key with the sender username in incoming messages
+        // to true, triggering the rendering of thje new message icon
 
         //=====================================================================
       } else {
@@ -142,6 +143,10 @@ export default function Dashboard(props) {
     // clean up for socket
 
     return () => socket.off("dispatched_message");
+  }, [conversations, socket, incomingMessage]);
+
+  useEffect(() => {
+    console.log(conversations[friend.username]);
   }, [conversations]);
 
   return (

@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { compareFunction, dateOptionsMsg } from "../../config";
 
 export default function TextArea(props) {
