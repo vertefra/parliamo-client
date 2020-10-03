@@ -11,6 +11,12 @@ export default function TextArea(props) {
     setMessage(e.target.value);
   };
 
+  useEffect(() => {
+    if (conversation.length > 0) {
+      conversation.sort(compareFunction);
+    }
+  }, [conversation]);
+
   return (
     <div className="textArea">
       {/* // Text area and translation area */}
