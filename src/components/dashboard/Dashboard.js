@@ -108,7 +108,7 @@ export default function Dashboard(props) {
         console.log("update");
 
         const newData = [data, ...conversations[data.sender_username]];
-        newData.sort(compareFunction); // test
+        newData.sort(compareFunction); // test  test test
         setConversations({
           ...conversations,
           [data.sender_username]: newData,

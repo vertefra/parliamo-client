@@ -6,6 +6,11 @@ export default function TextArea(props) {
 
   const { friend, user, conversation, sendMessage } = props;
 
+  const handleChange = (e) => {
+    e.preventDefault();
+    setMessage(e.target.value);
+  };
+
   return (
     <div className="textArea">
       {/* // Text area and translation area */}
@@ -22,7 +27,7 @@ export default function TextArea(props) {
               id="textArea"
               value={message}
               className="primary-inp"
-              onChange={(e) => setMessage(e.target.value)}
+              onChange={handleChange}
             ></textarea>
             <input
               type="button"
