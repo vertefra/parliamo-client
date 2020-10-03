@@ -67,7 +67,7 @@ export default function Dashboard(props) {
       socket.on("ok_status", (data) => {
         if (data) {
           if (conversations[friend.username]) {
-            console.log("update");
+            console.log("update", msg);
             const newData = [msg, ...conversations[friend.username]];
             setConversations({
               ...conversations,
@@ -142,7 +142,7 @@ export default function Dashboard(props) {
     // clean up for socket
 
     return () => socket.off("dispatched_message");
-  }, [conversations, incomingMessage, socket]);
+  }, [conversations]);
 
   return (
     <>

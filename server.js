@@ -2,7 +2,7 @@ const express = require("express");
 const app = express();
 const path = require("path");
 const SSL_PORT = 443;
-const HTTP_PORT = 80;
+const HTTP_PORT = 4000;
 
 app.use(express.static("build"));
 
