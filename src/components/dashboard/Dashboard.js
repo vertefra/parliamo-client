@@ -67,7 +67,7 @@ export default function Dashboard(props) {
       socket.on("ok_status", (data) => {
         if (data) {
           if (conversations[friend.username]) {
-            const newData = [msg, ...conversations[friend.username]];
+            const newData = [...conversations[friend.username], msg];
             setConversations({
               ...conversations,
               [friend.username]: newData,
@@ -87,7 +87,7 @@ export default function Dashboard(props) {
       });
     } else {
       console.log("errror");
-      // setError("Select a recipient first!");
+      setError("Select a recipient first!");
     }
   };
 
