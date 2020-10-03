@@ -46,7 +46,7 @@ export default function TextArea(props) {
 
       <div className="conversation">
         {friend.username && conversation && conversation.length >= 0
-          ? conversation.sort(compareFunction).map((msg) => {
+          ? conversation.map((msg) => {
               const msgClass =
                 msg.sender_username === user.username
                   ? "sentMessage"

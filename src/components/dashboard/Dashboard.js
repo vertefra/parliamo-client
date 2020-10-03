@@ -67,7 +67,7 @@ export default function Dashboard(props) {
       socket.on("ok_status", (data) => {
         if (data) {
           if (conversations[friend.username]) {
-            const newData = [...conversations[friend.username], msg];
+            const newData = [msg, ...conversations[friend.username]];
             setConversations({
               ...conversations,
               [friend.username]: newData,
@@ -108,7 +108,7 @@ export default function Dashboard(props) {
         console.log("update");
 
         const newData = [data, ...conversations[data.sender_username]];
-        newData.sort(compareFunction); // test  test test
+        // newData.sort(compareFunction); // test  test test
         setConversations({
           ...conversations,
           [data.sender_username]: newData,
